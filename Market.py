@@ -1,23 +1,24 @@
 """
-Market data module
-Version 1.0
+Market Data Module
+Gets live market data from Twelve Data
 """
 
-class MarketData:
+import os
+import requests
 
-    def __init__(self):
-        self.symbol = ""
-        self.price = 0.0
-        self.trend = "UNKNOWN"
+API_KEY = os.getenv("TWELVE_DATA_API_KEY")
 
-    def set_market(self, symbol, price, trend):
-        self.symbol = symbol
-        self.price = price
-        self.trend = trend
+BASE_URL = "https://api.twelvedata.com/time_series"
 
-    def info(self):
-        return {
-            "symbol": self.symbol,
-            "price": self.price,
-            "trend": self.trend
-        }
+
+def get_market_data(symbol="EUR/USD", interval="1min", outputsize=100):
+    params = {
+        "symbol": symbol,
+        "interval": interval,
+        "outputsize": outputsize,
+        "apikey": API_KEY,
+    }
+
+    response = requests.get(BASE_URL, params=params, timeout=15)
+    response.raise_for_status()
+    return response.json()
