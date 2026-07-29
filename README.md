@@ -1,0 +1,2 @@
+# Quotex-AI
+Best of
